@@ -46,3 +46,14 @@ class UserLogin(APIView):
 
                 return Response({"message": "Otp code has send successfully..."}, status=status.HTTP_200_OK)
 
+class CheckOtp(APIView):
+    def post(self, request):
+        srz_data = OtpSerializer(request.POST)
+        if srz_data.is_valid():
+            otp = srz_data.validated_data["code"]
+            user = CustomAuthBackend.authenticate(request,phone_number=request.session["user_info"]["phone_number"],code=otp)
+            if user is not None:
+                login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+                return Response({'message': "you are logged in successfully."}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "Entered wrong password."}, status=status.HTTP_400_BAD_REQUEST)
