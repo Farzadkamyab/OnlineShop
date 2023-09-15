@@ -21,10 +21,10 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('employee', include("employee.urls")),
-    path('orders', include("orders.urls")),
-    path('product', include("product.urls")),
-    path('users', include("users.urls")),
+    path('employee/', include("employee.urls")),
+    path('orders/', include("orders.urls")),
+    path('product/', include("product.urls")),
+    path('users/', include("users.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
