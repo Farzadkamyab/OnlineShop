@@ -31,7 +31,7 @@ class UserLogin(APIView):
         srz_data = UserLoginSerializer(request.POST)
         if srz_data.is_valid():
             random_code = random.randint(1000, 9999)
-            print(random_code)
+            print(f"Your OTP: {random_code}")
             CustomUser.objects.update(code=random_code)
             phone_number = srz_data.validated_data.get("phone_number")
             formatted_phone_number = re.sub(r"^\+98|^0098", "0", phone_number)
