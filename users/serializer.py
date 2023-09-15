@@ -17,3 +17,13 @@ class UserAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = "__all__"
+
+class OtpSerializer(serializers.Serializer):
+    otp = serializers.IntegerField()
+
+class UserCompleteInfo(serializers.Serializer):
+    user_info = UserSignUpSerializer()
+    user_address = UserAddressSerializer()
+
+    def create(self, validated_data):
+        return super().create(validated_data)
