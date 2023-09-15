@@ -22,7 +22,6 @@ class PhoneNumberField(models.CharField):
         formatted_phone_number = re.sub(r"^\+98|^0098", "0", value)
         return formatted_phone_number
 
-
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number = PhoneNumberField(
         _("phone number"),
@@ -49,3 +48,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         permissions = [
             ("can_access_dashboard", "Can access the dashboard"),
         ]
+
+class Address(models.Model):
+    state = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    street = models.CharField(max_length=100)
+    postal_code = models.IntegerField()
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
