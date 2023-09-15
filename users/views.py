@@ -57,3 +57,8 @@ class CheckOtp(APIView):
                 return Response({'message': "you are logged in successfully."}, status=status.HTTP_200_OK)
             else:
                 return Response({"message": "Entered wrong password."}, status=status.HTTP_400_BAD_REQUEST)
+
+class UserLogout(APIView):
+    def get(self, request):
+        logout(request)
+        return Response({'message': "you are logged out successfully."}, status=status.HTTP_200_OK)
