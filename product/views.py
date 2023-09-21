@@ -65,8 +65,30 @@ class AddToCardView(APIView):
         return Response({"message": "added to card successfully..."}, status=status.HTTP_200_OK)
 
 class ShopCardView(APIView, PageNumberPagination):
-    permission_classes = [AllowAny, IsAuthenticated]
+    permission_classes = [IsAuthenticated, ]
     
     def get(self, request):
-        products = request.session["products"]
-        return Response(products, status=status.HTTP_200_OK)
+        if request.session.has_key("products"):
+            products = request.session["products"]
+            return Response(products, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "There is no product to show..."}, status=status.HTTP_200_OK)
+        
+class RemoveFromShopCardView(APIView):
+    def post(self, request, product_id):
+        quantity = request.POST.get("quantity", None)
+        del_all = request.POST.get("delete_all", None)
+        product_obj = Product.objects.filter(id=product_id)
+        product_list = request.session["product"]
+        
+        if del_all is not None:
+            del product_list
+        else:
+            for item in product_list:
+                if quantity == None:
+                    if item["name"] == product_obj.name:
+                        product_list.pop(item)
+                else:
+                    if item["name"] == product_obj.name:
+                        item["quantity"] = quantity
+        return Response({"message": "item changed or removed successfully..."}, status=status.HTTP_200_OK)
