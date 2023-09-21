@@ -64,3 +64,9 @@ class AddToCardView(APIView):
             request.session['products'] = products_list
         return Response({"message": "added to card successfully..."}, status=status.HTTP_200_OK)
 
+class ShopCardView(APIView, PageNumberPagination):
+    permission_classes = [AllowAny, IsAuthenticated]
+    
+    def get(self, request):
+        products = request.session["products"]
+        return Response(products, status=status.HTTP_200_OK)
