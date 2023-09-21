@@ -23,12 +23,7 @@ class PhoneNumberField(models.CharField):
         return formatted_phone_number
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    phone_number = PhoneNumberField(
-        _("phone number"),
-        max_length=14,
-        unique=True,
-        validators=[phone_number_validator],
-    )
+    phone_number = PhoneNumberField(_("phone number"), max_length=14, unique=True, validators=[phone_number_validator])
     first_name = models.CharField(_("first name"), max_length=20)
     last_name = models.CharField(_("last name"), max_length=30)
     is_staff = models.BooleanField(default=False)
@@ -43,11 +38,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.phone_number
-
-    class Meta:
-        permissions = [
-            ("can_access_dashboard", "Can access the dashboard"),
-        ]
 
 class Address(models.Model):
     state = models.CharField(max_length=100)
