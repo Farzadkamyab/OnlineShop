@@ -36,7 +36,7 @@ class SearchProductView(APIView, PageNumberPagination):
         return Response(context, status=status.HTTP_200_OK)
     
 class AddToCardView(APIView):
-    permission_classes = [AllowAny, IsAuthenticated]
+    permission_classes = [IsAuthenticated, ]
 
     def post(self, request, product_id):
         quantity = request.POST["quantity"]
