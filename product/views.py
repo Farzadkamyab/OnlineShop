@@ -35,3 +35,32 @@ class SearchProductView(APIView, PageNumberPagination):
         }
         return Response(context, status=status.HTTP_200_OK)
     
+class AddToCardView(APIView):
+    permission_classes = [AllowAny, IsAuthenticated]
+
+    def post(self, request, product_id):
+        quantity = request.POST["quantity"]
+        product_obj = Product.objects.get(id=product_id)
+        data = {            
+                "name": product_obj.name,
+                "price": product_obj.price,
+                "quantity": int(quantity),
+                "total": product_obj.price * int(quantity)
+            }
+        
+        if request.session.has_key('products'):
+            products_list = request.session["products"]
+
+            for item in products_list:
+                if item["name"] == product_obj.name:
+                    item["quantity"] += int(quantity)
+                    item["total"] += data["total"]
+                else:
+                    products_list.append(data)
+
+            request.session["products"] = products_list
+        else:
+            products_list = [data, ]
+            request.session['products'] = products_list
+        return Response({"message": "added to card successfully..."}, status=status.HTTP_200_OK)
+
